@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Authentication</title>
+</head>
+<body>
+    <h2>User Authentication</h2>
+    <form method="POST" action="/">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        <label for="role">Role:</label>
+        <select id="role" name="role" required>
+            <option value="owner">Owner</option>
+            <option value="customer">Customer</option>
+        </select><br><br>
+        <button type="submit" name="action" value="login">Log In</button>
+        <button type="submit" name="action" value="signup">Sign Up</button>
+    </form>
+</body>
+</html>
