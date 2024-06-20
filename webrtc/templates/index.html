@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Video Stream</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        video {
+            border: 2px solid #333;
+            border-radius: 10px;
+            width: 640px;
+            height: 480px;
+        }
+    </style>
+</head>
+<body>
+    <video id="video" autoplay playsinline></video>
+    <script>
+        async function startVideo() {
+            const videoElement = document.getElementById('video');
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoElement.srcObject = stream;
+
+                // Send the stream to the server
+                const mediaRecorder = new MediaRecorder(stream);
+                let chunks = [];
+                
+                mediaRecorder.ondataavailable = function(e) {
+                    chunks.push(e.data);
+                };
+
+                mediaRecorder.onstop = function(e) {
+                    const blob = new Blob(chunks, { 'type': 'video/mp4' });
+                    chunks = [];
+                    const formData = new FormData();
+                    formData.append('file', blob, 'video.mp4');
+
+                    fetch('/upload_video', {
+                        method: 'POST',
+                        body: formData,
+                    }).then(response => response.json())
+                      .then(data => console.log(data))
+                      .catch(error => console.error('Error:', error));
+                };
+
+                mediaRecorder.start();
+
+                setTimeout(() => {
+                    mediaRecorder.stop();
+                }, 10000); // Record for 10 seconds
+            } catch (err) {
+                console.error('Error accessing media devices.', err);
+            }
+        }
+
+        window.onload = startVideo;
+    </script>
+</body>
+</html>
