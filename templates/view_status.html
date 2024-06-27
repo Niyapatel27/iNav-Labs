@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Status</title>
+</head>
+<body>
+    <h1>View Status</h1>
+    <ul>
+        {% for item in cart %}
+            <li>{{ item['item'] }} from {{ item['canteen'] }}: Rs. {{ item['price'] }}
+                -Status:
+                {% if item['item'] in accepted_orders %}
+                    Accepted
+                {% elif item['item'] in pending_orders %}
+                    Pending
+                {% elif item['item'] in cancelled_orders %}
+                    Cancelled
+                {% elif item['item'] in ready_orders %}
+                    Ready
+                {% elif item['item'] in dispatched_orders %}
+                    Dispatched, ORDER COMPLETED SUCCESSFULLY
+                {% else %}
+                    Not ordered
+                {% endif %}
+            </li>
+            <br>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('customer_home')}}">Continue order</a><br><br>
+</body>
+</html>

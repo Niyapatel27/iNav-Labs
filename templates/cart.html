@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+</head>
+<body>
+    <h1>Your Cart</h1>
+    <ul>
+        {% for item in cart %}
+            <li>{{ item['item'] }} from {{ item['canteen'] }}: Rs. {{ item['price'] }}
+            </li>
+        {% endfor %}
+    </ul>
+    <h2>Total bill: Rs. {{ total_price }}</h2>
+    <a href="{{ url_for('customer_home')}}">Continue order</a><br><br>
+    <form method="POST" action="{{ url_for('place_order') }}">
+        <input type="submit" value="Place Order">
+    </form>
+    <a href="{{ url_for('view_status') }}">View status</a>
+</body>
+</html>

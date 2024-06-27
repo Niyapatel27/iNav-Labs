@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Owner Home Page</title>
+</head>
+<body>
+  <h1>{{ session['user'] }}'s home page</h1>
+  <h1>Menu offered by you:</h1>
+  {% if items %}
+    <ul>
+      {% for item in items %}
+        <li>{{ item.name }} : Rs. {{ item.price }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No items added yet</p>
+  {% endif %}
+  <form action="/add_item" method="POST">
+    <button type="submit">Add Item</button>
+  </form><br>
+  <form action="/logout" method="POST">
+    <button type="submit">Logout</button>
+  </form>
+  <h3>Today's orders</h3>
+  {% if orders %}
+    <ul>
+      {% for order in orders %}
+        <li>
+          {{ order.customer }} ordered {{ order.item }} for Rs. {{ order.price }}
+          <form action="/review_order" method="POST" style="display:inline;">
+            <input type="hidden" name="order_id" value="{{ order.order_id }}">
+            <input type="hidden" name="item_name" value="{{ order.item }}">
+            <input type="hidden" name="action" value="accept">
+            <button type="submit">Accept</button>
+          </form>
+          <form action="/review_order" method="POST" style="display:inline;">
+            <input type="hidden" name="order_id" value="{{ order.order_id }}">
+            <input type="hidden" name="item_name" value="{{ order.item }}">
+            <input type="hidden" name="action" value="cancel">
+            <button type="submit">Cancel</button>
+          </form>
+          <!-- extra -->
+          <form action="/review_order" method="POST" style="display:inline;">
+            <input type="hidden" name="order_id" value="{{ order.order_id }}">
+            <input type="hidden" name="item_name" value="{{ order.item }}">
+            <input type="hidden" name="action" value="ready">
+            <button type="submit">Ready</button>
+          </form>
+          <form action="/review_order" method="POST" style="display:inline;">
+            <input type="hidden" name="order_id" value="{{ order.order_id }}">
+            <input type="hidden" name="item_name" value="{{ order.item }}">
+            <input type="hidden" name="action" value="dispatch">
+            <button type="submit">Dispatch</button>
+          </form><br><br>
+          <!-- extra ended -->
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No orders yet</p>
+  {% endif %}
+</body>
+</html>
